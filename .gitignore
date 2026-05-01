@@ -1,0 +1,8 @@
+# Design exploration files
+design_extracted/
+
+# Claude Code
+.claude/
+
+# Internal documents
+brief.md

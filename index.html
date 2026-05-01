@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neptun Sportsdykkerklubb — Sandnessjøen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --seaglass: oklch(0.55 0.08 200);
+      --ink:      oklch(0.22 0.01 240);
+      --muted:    oklch(0.55 0.01 240);
+      --bone:     oklch(0.985 0.005 90);
+      --line:     oklch(0.92 0.005 240);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Geist', -apple-system, sans-serif;
+      background: var(--bone);
+      color: var(--ink);
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 32px;
+      align-items: center;
+      padding: 24px 48px;
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      background: color-mix(in oklch, var(--bone) 93%, transparent);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .nav-brand img {
+      height: 28px;
+      width: auto;
+      mix-blend-mode: multiply;
+      align-self: center;
+    }
+
+    .nav-brand-name {
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
+
+    .nav-brand-sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      justify-content: center;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      color: var(--ink);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover { color: var(--seaglass); }
+
+    .lang-toggle {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .lang-toggle button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      font-size: 12px;
+      color: var(--muted);
+      font-family: inherit;
+      transition: color .2s;
+    }
+
+    .lang-toggle .sep { opacity: 0.3; }
+
+    .lang-toggle button.active {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    /* ── HERO ── */
+    #hjem {
+      position: relative;
+      min-height: 780px;
+      height: 88vh;
+      overflow: hidden;
+      background: #0A1A24;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 35%;
+      filter: saturate(0.95) brightness(0.92);
+    }
+
+    .hero-scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg,
+        rgba(8,18,28,.55) 0%,
+        rgba(8,18,28,.15) 30%,
+        rgba(8,18,28,.45) 70%,
+        rgba(8,18,28,.85) 100%
+      );
+    }
+
+    .hero-inner {
+      position: absolute;
+      left: 48px;
+      right: 48px;
+      top: 50%;
+      transform: translateY(-58%);
+      max-width: 720px;
+      color: #fff;
+    }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      letter-spacing: .18em;
+      color: rgba(255,255,255,.85);
+      margin-bottom: 32px;
+      font-family: 'Geist Mono', monospace;
+    }
+
+    .hero-eyebrow .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #9FD4DE;
+      flex-shrink: 0;
+    }
+
+    .hero-h {
+      font-size: clamp(56px, 7vw, 96px);
+      line-height: .98;
+      font-weight: 400;
+      letter-spacing: -.035em;
+      margin-bottom: 28px;
+      color: #fff;
+    }
+
+    .hero-p {
+      font-size: 18px;
+      line-height: 1.55;
+      color: rgba(255,255,255,.85);
+      max-width: 48ch;
+      margin-bottom: 36px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .hero-caption {
+      position: absolute;
+      top: 110px;
+      right: 48px;
+      text-align: right;
+      color: #fff;
+    }
+
+    .hero-caption-n {
+      font-family: 'Geist Mono', monospace;
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: -.01em;
+      color: #9FD4DE;
+    }
+
+    .hero-caption-l {
+      font-size: 11px;
+      letter-spacing: .12em;
+      margin-top: 6px;
+      opacity: .8;
+      font-family: 'Geist Mono', monospace;
+      text-transform: uppercase;
+    }
+
+    .hero-facts-bar {
+      position: absolute;
+      left: 48px;
+      right: 48px;
+      bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,.18);
+      color: #fff;
+    }
+
+    .hero-fact {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .hero-fact-n {
+      font-size: 26px;
+      font-weight: 400;
+      letter-spacing: -.02em;
+    }
+
+    .hero-fact-l {
+      font-size: 11px;
+      color: rgba(255,255,255,.65);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-family: 'Geist Mono', monospace;
+    }
+
+    .hero-fact-divider {
+      width: 1px;
+      height: 36px;
+      background: rgba(255,255,255,.18);
+    }
+
+    /* ── BUTTONS ── */
+    .btn-fill {
+      display: inline-block;
+      padding: 12px 22px;
+      background: var(--ink);
+      color: var(--bone);
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      transition: opacity .2s;
+    }
+
+    .btn-fill:hover { opacity: .8; }
+
+    .btn-link-light {
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,.5);
+      padding-bottom: 2px;
+      transition: border-color .2s;
+    }
+
+    .btn-link-light:hover { border-color: #fff; }
+
+    /* ── SECTIONS ── */
+    .section {
+      padding: 100px 48px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 64px;
+      margin-bottom: 56px;
+      align-items: start;
+    }
+
+    .section-meta {
+      position: sticky;
+      top: 100px;
+    }
+
+    .kicker {
+      font-family: 'Geist Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .12em;
+      color: var(--seaglass);
+      text-transform: uppercase;
+    }
+
+    .meta-body {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--muted);
+      margin-top: 12px;
+      max-width: 32ch;
+    }
+
+    .h2 {
+      font-size: clamp(36px, 4.5vw, 64px);
+      line-height: 1.02;
+      font-weight: 400;
+      letter-spacing: -.03em;
+      margin: 0 0 32px;
+      max-width: 18ch;
+    }
+
+    .h2 .muted { color: var(--muted); }
+
+    .lead {
+      font-size: 18px;
+      line-height: 1.55;
+      margin-bottom: 16px;
+      max-width: 52ch;
+    }
+
+    .body-text {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--muted);
+      max-width: 55ch;
+    }
+
+    /* ── DIVE SITES ── */
+    .spots-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .spot-card {
+      display: block;
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    .spot-card:hover .spot-img-wrap img { transform: translateY(-4px); }
+
+    .spot-img-wrap {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: var(--line);
+      margin-bottom: 18px;
+    }
+
+    .spot-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .35s ease;
+    }
+
+    .spot-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-family: 'Geist Mono', monospace;
+      letter-spacing: .08em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .spot-depth { color: var(--seaglass); }
+
+    .spot-name {
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: -.02em;
+      margin: 0 0 8px;
+    }
+
+    .spot-desc {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .spot-level {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .lvl-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--line);
+    }
+
+    .lvl-dot.on { background: var(--seaglass); }
+
+    .lvl-label {
+      margin-left: 8px;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: .05em;
+      font-family: 'Geist Mono', monospace;
+    }
+
+    /* ── PHOTO MOSAIC ── */
+    .photo-mosaic {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 180px;
+      gap: 12px;
+      margin-top: 48px;
+    }
+
+    .mosaic-cell {
+      overflow: hidden;
+      background: var(--line);
+    }
+
+    .mosaic-cell img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .mosaic-large {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+
+    /* ── CLUBHOUSE ── */
+    .club-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .club-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+    }
+
+    .spec-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid var(--line);
+    }
+
+    .spec { display: flex; flex-direction: column; gap: 4px; }
+
+    .spec-k {
+      font-size: 11px;
+      color: var(--muted);
+      font-family: 'Geist Mono', monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .spec-v { font-size: 17px; }
+
+    /* ── CONTACT ── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .f-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field-label {
+      font-size: 11px;
+      color: var(--muted);
+      font-family: 'Geist Mono', monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 12px 14px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--ink);
+      outline: none;
+      border-radius: 0;
+      transition: border-color .2s;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus { border-color: var(--seaglass); }
+
+    .field textarea { min-height: 120px; resize: vertical; }
+
+    .info-col {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .info-block {
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .info-txt {
+      font-size: 15px;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 32px 48px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted);
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-brand img {
+      height: 24px;
+      mix-blend-mode: multiply;
+    }
+
+    /* ── LANG ── */
+    [data-lang]:not([data-lang="no"]) { display: none; }
+    body.lang-en [data-lang="no"] { display: none; }
+    body.lang-en [data-lang="en"] { display: revert; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; gap: 16px; }
+      .nav-links { display: none; }
+      .section { padding: 72px 24px; }
+      .section-grid { grid-template-columns: 1fr; gap: 32px; }
+      .section-meta { position: static; }
+      #hjem { height: auto; min-height: 600px; padding-bottom: 80px; }
+      .hero-inner { left: 24px; right: 24px; position: relative; top: auto; transform: none; padding-top: 60px; }
+      .hero-bg { position: absolute; }
+      .hero-scrim { position: absolute; }
+      .hero-caption { display: none; }
+      .hero-facts-bar { left: 24px; right: 24px; bottom: 20px; flex-wrap: wrap; gap: 20px; }
+      .spots-grid { grid-template-columns: 1fr; }
+      .photo-mosaic { grid-template-columns: repeat(2, 1fr); }
+      .mosaic-large { grid-column: span 2; }
+      .club-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .f-row { grid-template-columns: 1fr; }
+      footer { padding: 24px; flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hjem" class="nav-brand">
+      <img src="img/neptun-sportsdykkerklubb-logo.png" alt="Neptun logo" />
+      <span class="nav-brand-name">Neptun</span>
+      <span class="nav-brand-sub">Sportsdykkerklubb</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#hjem"         data-lang="no">Hjem</a>         <a href="#hjem"         data-lang="en">Home</a></li>
+      <li><a href="#om-oss"       data-lang="no">Om oss</a>       <a href="#om-oss"       data-lang="en">About</a></li>
+      <li><a href="#dykkestedder" data-lang="no">Dykkestedder</a> <a href="#dykkestedder" data-lang="en">Sites</a></li>
+      <li><a href="#bilder"       data-lang="no">Bilder</a>       <a href="#bilder"       data-lang="en">Photos</a></li>
+      <li><a href="#klubbhus"     data-lang="no">Klubbhus</a>     <a href="#klubbhus"     data-lang="en">House</a></li>
+      <li><a href="#kontakt"      data-lang="no">Kontakt</a>      <a href="#kontakt"      data-lang="en">Contact</a></li>
+    </ul>
+
+    <div class="lang-toggle">
+      <button class="active" onclick="setLang('no')">NO</button>
+      <span class="sep">·</span>
+      <button onclick="setLang('en')">EN</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hjem">
+    <img class="hero-bg" src="img/rigelDykk.jpg" alt="" />
+    <div class="hero-scrim"></div>
+
+    <div class="hero-inner">
+      <div class="hero-eyebrow">
+        <span class="dot"></span>
+        <span>SANDNESSJØEN · NORDLAND · EST. 1976</span>
+      </div>
+      <h1 class="hero-h">
+        <span data-lang="no">Et godt sted<br />å gå i sjøen.</span>
+        <span data-lang="en">A good place<br />to enter the sea.</span>
+      </h1>
+      <p class="hero-p" data-lang="no">Neptun Sportsdykkerklubb er en liten dykkeforening på Helgelandskysten. Vi er rundt 50 medlemmer som dykker hver uke, året rundt — siden 1976.</p>
+      <p class="hero-p" data-lang="en">Neptun Sportsdykkerklubb is a small diving club on the Helgeland coast. About 50 of us, diving every week, year-round — since 1976.</p>
+      <div class="hero-actions">
+        <a href="#kontakt" class="btn-fill" data-lang="no">Bli medlem</a>
+        <a href="#kontakt" class="btn-fill" data-lang="en">Become a member</a>
+        <a href="#dykkestedder" class="btn-link-light" data-lang="no">Se dykkestedder →</a>
+        <a href="#dykkestedder" class="btn-link-light" data-lang="en">See dive sites →</a>
+      </div>
+    </div>
+
+    <div class="hero-caption">
+      <div class="hero-caption-n">—40m</div>
+      <div class="hero-caption-l" data-lang="no">Vrakdykk · Rigel, Rødøy</div>
+      <div class="hero-caption-l" data-lang="en">Wreck dive · Rigel, Rødøy</div>
+    </div>
+
+    <div class="hero-facts-bar">
+      <div class="hero-fact">
+        <span class="hero-fact-n">1976</span>
+        <span class="hero-fact-l" data-lang="no">Stiftet</span>
+        <span class="hero-fact-l" data-lang="en">Founded</span>
+      </div>
+      <div class="hero-fact-divider"></div>
+      <div class="hero-fact">
+        <span class="hero-fact-n">~50</span>
+        <span class="hero-fact-l" data-lang="no">Medlemmer</span>
+        <span class="hero-fact-l" data-lang="en">Members</span>
+      </div>
+      <div class="hero-fact-divider"></div>
+      <div class="hero-fact">
+        <span class="hero-fact-n">NSDF</span>
+        <span class="hero-fact-l" data-lang="no">Tilknytning</span>
+        <span class="hero-fact-l" data-lang="en">Affiliation</span>
+      </div>
+      <div class="hero-fact-divider"></div>
+      <div class="hero-fact">
+        <span class="hero-fact-n">52°</span>
+        <span class="hero-fact-l" data-lang="no">Aktive uker</span>
+        <span class="hero-fact-l" data-lang="en">Active weeks</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- OM OSS -->
+  <section id="om-oss" class="section">
+    <div class="section-grid">
+      <div class="section-meta">
+        <div class="kicker">01 — <span data-lang="no">Om klubben</span><span data-lang="en">About</span></div>
+      </div>
+      <div>
+        <h2 class="h2">
+          <span data-lang="no">Liten klubb. <span class="muted">Lange dykk.</span></span>
+          <span data-lang="en">Small club. <span class="muted">Long dives.</span></span>
+        </h2>
+        <p class="lead" data-lang="no">Vi er en av flere lokale dykkeklubber langs Helgelandskysten — og en av de eldste. Aktive året rundt, med tirsdagstreff på klubbhuset og helgedykk fra båt eller land.</p>
+        <p class="lead" data-lang="en">We're one of several local diving clubs along the Helgeland coast — and one of the oldest. Active year-round, with Tuesday meetups at the clubhouse and weekend dives from boat or shore.</p>
+        <p class="body-text" data-lang="no">Vi tilbyr CMAS-kurs gjennom NSDF — fra grunnkurs til instruktørnivå — guidede dykk for medlemmer og besøkende, og er alltid på jakt etter nye folk å dele opplevelsene med.</p>
+        <p class="body-text" data-lang="en">We offer CMAS courses through NSDF — from beginner to instructor level — guided dives for members and visitors, and we're always looking for new people to share the experience with.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DYKKESTEDDER -->
+  <section id="dykkestedder" class="section" style="border-top: 1px solid var(--line);">
+    <div class="section-grid">
+      <div class="section-meta">
+        <div class="kicker">02 — <span data-lang="no">Dykkestedder</span><span data-lang="en">Dive sites</span></div>
+        <p class="meta-body" data-lang="no">Et utvalg av stedene vi dykker oftest. Alle ligger innen kjøreavstand fra klubbhuset.</p>
+        <p class="meta-body" data-lang="en">A selection of the sites we dive most often. All within driving distance of the clubhouse.</p>
+      </div>
+      <div>
+        <h2 class="h2">
+          <span data-lang="no">Stedene <span class="muted">vi går tilbake til.</span></span>
+          <span data-lang="en">The places <span class="muted">we return to.</span></span>
+        </h2>
+      </div>
+    </div>
+
+    <div class="spots-grid">
+
+      <a href="#" class="spot-card">
+        <div class="spot-img-wrap">
+          <img src="img/krabbeDykk.jpg" alt="Lovund" />
+        </div>
+        <div class="spot-meta">
+          <span>Lurøy</span>
+          <span class="spot-depth">40m</span>
+        </div>
+        <h3 class="spot-name">Lovund</h3>
+        <p class="spot-desc" data-lang="no">Korallrev og kelpeskog. Lunder over havflaten.</p>
+        <p class="spot-desc" data-lang="en">Coral reef and kelp forest. Puffins above.</p>
+        <div class="spot-level">
+          <span class="lvl-dot on"></span><span class="lvl-dot on"></span>
+          <span class="lvl-dot"></span><span class="lvl-dot"></span><span class="lvl-dot"></span>
+          <span class="lvl-label" data-lang="no">LETT</span>
+          <span class="lvl-label" data-lang="en">EASY</span>
+        </div>
+      </a>
+
+      <a href="#" class="spot-card">
+        <div class="spot-img-wrap">
+          <img src="img/kamskjell.jpg" alt="Træna" />
+        </div>
+        <div class="spot-meta">
+          <span>Træna</span>
+          <span class="spot-depth">35m</span>
+        </div>
+        <h3 class="spot-name">Træna</h3>
+        <p class="spot-desc" data-lang="no">Arkipelag med dramatiske formasjoner.</p>
+        <p class="spot-desc" data-lang="en">Archipelago with dramatic formations.</p>
+        <div class="spot-level">
+          <span class="lvl-dot on"></span><span class="lvl-dot on"></span><span class="lvl-dot on"></span>
+          <span class="lvl-dot"></span><span class="lvl-dot"></span>
+          <span class="lvl-label" data-lang="no">MIDDELS</span>
+          <span class="lvl-label" data-lang="en">INTERMEDIATE</span>
+        </div>
+      </a>
+
+      <a href="rigel.html" class="spot-card">
+        <div class="spot-img-wrap">
+          <img src="img/rigelDykk.jpg" alt="Rigel" />
+        </div>
+        <div class="spot-meta">
+          <span>Rødøy</span>
+          <span class="spot-depth">40m</span>
+        </div>
+        <h3 class="spot-name">Rigel</h3>
+        <p class="spot-desc" data-lang="no">Vrak fra 1944. Rikt liv mellom platene.</p>
+        <p class="spot-desc" data-lang="en">Wreck from 1944. Rich life between the plates.</p>
+        <div class="spot-level">
+          <span class="lvl-dot on"></span><span class="lvl-dot on"></span><span class="lvl-dot on"></span>
+          <span class="lvl-dot"></span><span class="lvl-dot"></span>
+          <span class="lvl-label" data-lang="no">MIDDELS</span>
+          <span class="lvl-label" data-lang="en">INTERMEDIATE</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- BILDER -->
+  <section id="bilder" class="section" style="border-top: 1px solid var(--line);">
+    <div class="section-grid">
+      <div class="section-meta">
+        <div class="kicker">03 — <span data-lang="no">Bilder</span><span data-lang="en">Photos</span></div>
+      </div>
+      <div>
+        <h2 class="h2">
+          <span data-lang="no">Fra <span class="muted">vannet.</span></span>
+          <span data-lang="en">From <span class="muted">the water.</span></span>
+        </h2>
+        <p class="body-text" data-lang="no">Bilder tatt av våre medlemmer — fra dykk, turer og livet under overflaten langs Helgelandskysten.</p>
+        <p class="body-text" data-lang="en">Images taken by our members — from dives, trips, and life beneath the surface along the Helgeland coast.</p>
+        <a href="#" class="btn-fill" style="margin-top:24px;display:inline-block" data-lang="no">Åpne fotoalbum →</a>
+        <a href="#" class="btn-fill" style="margin-top:24px;display:inline-block" data-lang="en">Open album →</a>
+      </div>
+    </div>
+
+    <div class="photo-mosaic">
+      <div class="mosaic-cell mosaic-large">
+        <img src="img/dykkebåt2.jpg" alt="" />
+      </div>
+      <div class="mosaic-cell"><img src="img/krabbeDykk.jpg" alt="" /></div>
+      <div class="mosaic-cell"><img src="img/kamskjell.jpg" alt="" /></div>
+      <div class="mosaic-cell"><img src="img/dykkebåt.jpg" alt="" /></div>
+      <div class="mosaic-cell"><img src="img/rigelDykk.jpg" alt="" /></div>
+    </div>
+  </section>
+
+  <!-- KLUBBHUS -->
+  <section id="klubbhus" class="section" style="border-top: 1px solid var(--line);">
+    <div class="section-grid">
+      <div class="section-meta">
+        <div class="kicker">04 — <span data-lang="no">Klubbhuset</span><span data-lang="en">Clubhouse</span></div>
+      </div>
+      <div>
+        <h2 class="h2">
+          <span data-lang="no">Et rødt hus <span class="muted">nær fjæra.</span></span>
+          <span data-lang="en">A red house <span class="muted">near the shore.</span></span>
+        </h2>
+      </div>
+    </div>
+
+    <div class="club-grid">
+      <img class="club-img" src="img/klubbhus.jpg" alt="Klubbhuset" />
+      <div>
+        <p class="lead" data-lang="no">Klubbhuset er base for kurs, dykk og fellesmiddag på tirsdager — og kan leies til private arrangementer.</p>
+        <p class="lead" data-lang="en">The clubhouse is our base for courses, dives, and Tuesday dinners — and can be rented for private events.</p>
+        <div class="spec-grid">
+          <div class="spec">
+            <span class="spec-k" data-lang="no">Kapasitet</span>
+            <span class="spec-k" data-lang="en">Capacity</span>
+            <span class="spec-v">50</span>
+          </div>
+          <div class="spec">
+            <span class="spec-k" data-lang="no">Kjøkken</span>
+            <span class="spec-k" data-lang="en">Kitchen</span>
+            <span class="spec-v" data-lang="no">Fullt utstyrt</span>
+            <span class="spec-v" data-lang="en">Equipped</span>
+          </div>
+          <div class="spec">
+            <span class="spec-k">AV</span>
+            <span class="spec-v" data-lang="no">Projektor + lyd</span>
+            <span class="spec-v" data-lang="en">Projector + sound</span>
+          </div>
+          <div class="spec">
+            <span class="spec-k" data-lang="no">Parkering</span>
+            <span class="spec-k" data-lang="en">Parking</span>
+            <span class="spec-v" data-lang="no">Rett ved</span>
+            <span class="spec-v" data-lang="en">Adjacent</span>
+          </div>
+        </div>
+        <a href="#kontakt" class="btn-fill" style="margin-top:32px;display:inline-block" data-lang="no">Send leieforespørsel →</a>
+        <a href="#kontakt" class="btn-fill" style="margin-top:32px;display:inline-block" data-lang="en">Request rental →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- KONTAKT -->
+  <section id="kontakt" class="section" style="border-top: 1px solid var(--line);">
+    <div class="section-grid">
+      <div class="section-meta">
+        <div class="kicker">05 — <span data-lang="no">Kontakt</span><span data-lang="en">Contact</span></div>
+      </div>
+      <div>
+        <h2 class="h2">
+          <span data-lang="no">Skriv til <span class="muted">oss.</span></span>
+          <span data-lang="en">Get in <span class="muted">touch.</span></span>
+        </h2>
+      </div>
+    </div>
+
+    <div class="contact-grid">
+      <form class="form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <div class="f-row">
+          <div class="field">
+            <span class="field-label" data-lang="no">Navn</span>
+            <span class="field-label" data-lang="en">Name</span>
+            <input type="text" name="navn" required />
+          </div>
+          <div class="field">
+            <span class="field-label">E-post</span>
+            <input type="email" name="email" required />
+          </div>
+        </div>
+        <div class="field">
+          <span class="field-label" data-lang="no">Emne</span>
+          <span class="field-label" data-lang="en">Subject</span>
+          <select name="emne">
+            <option data-lang="no">Bli medlem</option>
+            <option data-lang="en">Membership</option>
+            <option data-lang="no">Leie av klubbhus</option>
+            <option data-lang="en">Clubhouse rental</option>
+            <option data-lang="no">Kurs</option>
+            <option data-lang="en">Courses</option>
+            <option data-lang="no">Annet</option>
+            <option data-lang="en">Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <span class="field-label" data-lang="no">Melding</span>
+          <span class="field-label" data-lang="en">Message</span>
+          <textarea name="melding" required></textarea>
+        </div>
+        <button type="submit" class="btn-fill" style="align-self:flex-start">
+          <span data-lang="no">Send melding →</span>
+          <span data-lang="en">Send →</span>
+        </button>
+      </form>
+
+      <div class="info-col">
+        <div class="info-block">
+          <div class="kicker" data-lang="no">Adresse</div>
+          <div class="kicker" data-lang="en">Address</div>
+          <div class="info-txt">Sandnessjøen<br />Nordland, Norge</div>
+        </div>
+        <div class="info-block">
+          <div class="kicker">E-post</div>
+          <div class="info-txt">kontakt@neptunsdk.no</div>
+        </div>
+        <div class="info-block">
+          <div class="kicker" data-lang="no">Tilknytning</div>
+          <div class="kicker" data-lang="en">Affiliation</div>
+          <div class="info-txt">Norges Sportsdykker&shy;forbund (NSDF)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">
+      <img src="img/neptun-sportsdykkerklubb-logo.png" alt="Neptun logo" />
+      <span>© 2026 Neptun Sportsdykkerklubb</span>
+    </div>
+    <span>
+      Sandnessjøen · <span data-lang="no">Tilknyttet NSDF</span><span data-lang="en">Affiliated with NSDF</span>
+    </span>
+  </footer>
+
+  <script>
+    function setLang(lang) {
+      document.body.classList.toggle('lang-en', lang === 'en');
+      document.querySelectorAll('.lang-toggle button').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.trim() === lang.toUpperCase());
+      });
+    }
+  </script>
+</body>
+</html>
