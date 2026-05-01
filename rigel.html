@@ -412,20 +412,149 @@
     body.lang-en [data-lang="no"] { display: none; }
     body.lang-en [data-lang="en"] { display: revert; }
 
+    /* ── HAMBURGER BUTTON ── */
+    .menu-btn {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      padding: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .menu-btn span {
+      display: block;
+      height: 1.5px;
+      background: var(--ink);
+      border-radius: 1px;
+      transition: width .2s;
+    }
+
+    .menu-btn span:first-child { width: 22px; }
+    .menu-btn span:last-child  { width: 14px; }
+
+    /* ── MOBILE MENU OVERLAY ── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bone);
+      z-index: 200;
+      flex-direction: column;
+      padding: 14px 20px;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .mobile-menu-close {
+      background: none;
+      border: none;
+      font-size: 32px;
+      color: var(--ink);
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+      font-weight: 200;
+    }
+
+    .mobile-menu-nav {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      margin-top: 24px;
+      overflow-y: auto;
+    }
+
+    .mobile-menu-item {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+    }
+
+    .mobile-menu-item:hover { color: var(--seaglass); }
+
+    .mobile-menu-num {
+      font-family: 'Geist Mono', monospace;
+      font-size: 11px;
+      color: var(--seaglass);
+      letter-spacing: 0.1em;
+      min-width: 24px;
+    }
+
+    .mobile-menu-arrow {
+      margin-left: auto;
+      font-size: 18px;
+      color: var(--muted);
+    }
+
+    .mobile-menu-foot {
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mobile-menu-foot-email {
+      font-size: 12px;
+      color: var(--muted);
+      font-family: 'Geist Mono', monospace;
+    }
+
+    .mobile-lang-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .mobile-lang-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 13px;
+    }
+
+    .mobile-lang-btn.active {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
-      nav { padding: 20px 24px; gap: 16px; }
+      nav { padding: 14px 20px; gap: 16px; }
       .nav-links { display: none; }
-      .section { padding: 56px 24px; }
+      .lang-toggle { display: none; }
+      .menu-btn { display: flex; }
+      .section { padding: 56px 20px; }
       .section-grid { grid-template-columns: 1fr; gap: 32px; }
       .section-meta { position: static; }
       .hero { height: auto; min-height: 520px; }
-      .hero-inner { left: 24px; right: 24px; bottom: 36px; }
-      .hero-breadcrumb { left: 24px; }
+      .hero-inner { left: 20px; right: 20px; bottom: 36px; }
+      .hero-breadcrumb { left: 20px; }
       .hero-stats { flex-wrap: wrap; gap: 20px; }
       .gallery { grid-template-columns: 1fr 1fr; }
       .specs { grid-template-columns: 1fr 1fr; }
-      footer { padding: 24px; flex-direction: column; gap: 12px; text-align: center; }
+      footer { padding: 24px 20px; flex-direction: column; gap: 12px; text-align: center; }
     }
 
     @media (max-width: 540px) {
@@ -457,7 +586,41 @@
       <span class="sep">·</span>
       <button onclick="setLang('en')">EN</button>
     </div>
+
+    <button class="menu-btn" onclick="openMenu()" aria-label="Meny">
+      <span></span>
+      <span></span>
+    </button>
   </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobile-menu">
+    <div class="mobile-menu-top">
+      <a href="index.html" class="nav-brand" onclick="closeMenu()">
+        <img src="img/neptun-sportsdykkerklubb-logo.png" alt="Neptun logo" />
+        <span class="nav-brand-name">Neptun</span>
+      </a>
+      <button class="mobile-menu-close" onclick="closeMenu()" aria-label="Lukk">×</button>
+    </div>
+
+    <nav class="mobile-menu-nav">
+      <a href="index.html#hjem"         class="mobile-menu-item" onclick="closeMenu()"><span class="mobile-menu-num">01</span><span data-lang="no">Hjem</span><span data-lang="en">Home</span><span class="mobile-menu-arrow">→</span></a>
+      <a href="index.html#om-oss"       class="mobile-menu-item" onclick="closeMenu()"><span class="mobile-menu-num">02</span><span data-lang="no">Om oss</span><span data-lang="en">About</span><span class="mobile-menu-arrow">→</span></a>
+      <a href="index.html#dykkestedder" class="mobile-menu-item" onclick="closeMenu()"><span class="mobile-menu-num">03</span><span data-lang="no">Dykkestedder</span><span data-lang="en">Sites</span><span class="mobile-menu-arrow">→</span></a>
+      <a href="index.html#bilder"       class="mobile-menu-item" onclick="closeMenu()"><span class="mobile-menu-num">04</span><span data-lang="no">Bilder</span><span data-lang="en">Photos</span><span class="mobile-menu-arrow">→</span></a>
+      <a href="index.html#klubbhus"     class="mobile-menu-item" onclick="closeMenu()"><span class="mobile-menu-num">05</span><span data-lang="no">Klubbhus</span><span data-lang="en">Clubhouse</span><span class="mobile-menu-arrow">→</span></a>
+      <a href="index.html#kontakt"      class="mobile-menu-item" onclick="closeMenu()"><span class="mobile-menu-num">06</span><span data-lang="no">Kontakt</span><span data-lang="en">Contact</span><span class="mobile-menu-arrow">→</span></a>
+    </nav>
+
+    <div class="mobile-menu-foot">
+      <div class="mobile-lang-row">
+        <button class="mobile-lang-btn active" onclick="setLang('no');updateMobileLang('no')">NO</button>
+        <span style="opacity:.4">·</span>
+        <button class="mobile-lang-btn" onclick="setLang('en');updateMobileLang('en')">EN</button>
+      </div>
+      <span class="mobile-menu-foot-email">kontakt@neptunsdk.no</span>
+    </div>
+  </div>
 
   <!-- HERO -->
   <section class="hero">
@@ -700,6 +863,22 @@
     function setLang(lang) {
       document.body.classList.toggle('lang-en', lang === 'en');
       document.querySelectorAll('.lang-toggle button').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.trim() === lang.toUpperCase());
+      });
+    }
+
+    function openMenu() {
+      document.getElementById('mobile-menu').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      document.getElementById('mobile-menu').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function updateMobileLang(lang) {
+      document.querySelectorAll('.mobile-lang-btn').forEach(btn => {
         btn.classList.toggle('active', btn.textContent.trim() === lang.toUpperCase());
       });
     }
